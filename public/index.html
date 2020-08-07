@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AppId Multiple Instance POC App</title>
+</head>
+<body>
+<h2>Hello from the Multiple AppId POC App !</h2>
+<h3 id="greetings"></h3>
+<div id="login"></div>
+<a href="/appid/logout" id="logout">logout</a>
+
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $().ready(() => {
+        $("a").hide();
+        $.get("/api/user")
+            .then((resp) => {
+                $("#greetings").text("hello, " + resp.user.name);
+                $("#logout").show();
+            })
+            .catch((err) => {
+                $("#greetings").text("you are not aurhorized yet!");
+                showLogin();
+            })
+    });
+
+    function showLogin() {
+        $.get("/appid/frontendconfig")
+            .then((resp) => {
+                resp.forEach(config => {
+                    let loginButton=$("<a class = 'btn btn-primary'>").attr("href",config.loginPath);
+                    loginButton.text("login with "+config.displayName);
+                    $("#login").append(loginButton);
+                    $("#login").append("<br>");
+                })
+            })
+    }
+</script>
+</body>
+</html>
