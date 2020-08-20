@@ -2,7 +2,7 @@ const express = require('express');                                 //https://ww
 const app = express();
 const session = require('express-session');                         //https://www.npmjs.com/package/express-session
 const authManager = require('./auth-manager');
-
+let port = process.env.PORT;
 app.use(session({
     secret: '123456',
     resave: true,
@@ -58,6 +58,6 @@ app.get("/api/user",(req,res)=>{
 app.use(express.static('./public'));
 
 //start server
-app.listen(3001, () => {
-    console.log("app listening on http://localhost:3001")
+app.listen(port, () => {
+    console.log("app listening on http://localhost:"+port)
 });
